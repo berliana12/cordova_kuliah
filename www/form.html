@@ -1,0 +1,101 @@
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="css/ionic.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/geturi.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function() {
+        var id = decodeURI(getUrlVars()["id"]);
+        var title = decodeURI(getUrlVars()["title"]);
+        var singer = decodeURI(getUrlVars()["singer"]);
+        var country = decodeURI(getUrlVars()["country"]);
+        $("#id").val(id);
+        $("#title").val(title);
+        $("#singer").val(singer);
+        $("#country").val(country);
+        $("#update").click(function() {
+            var id = $("#id").val();
+            var title = $("#title").val();
+            var singer = $("#singer").val();
+            var country = $("#country").val();
+            var dataString = "id=" + id + "&title=" + title + "&singer=" + singer + "&country=" + country + "&update=";
+            $.ajax({
+                type: "POST",
+                url: "https://berliansiwi.000webhostapp.com/appcordova/www/update.php",
+                data: dataString,
+                crossDomain: true,
+                cache: false,
+                beforeSend: function() {
+                    $("#update").val('Connecting...');
+                },
+                success: function(data) {
+                    if (data == "success") {
+                        alert("Updated");
+                        $("#update").val("Update");
+                    } else if (data == "error") {
+                        alert("error");
+                    }
+                }
+            });
+
+        });
+        $("#delete").click(function() {
+            var id = $("#id").val();
+            var dataString = "id=" + id + "&delete=";
+            $.ajax({
+                type: "GET",
+                url: "https://berliansiwi.000webhostapp.com/appcordova/www/delete.php",
+                data: dataString,
+                crossDomain: true,
+                cache: false,
+                beforeSend: function() {
+                    $("#delete").val('Connecting...');
+                },
+                success: function(data) {
+                    if (data == "success") {
+                        alert("Deleted");
+                        $("#delete").val("Delete");
+                    } else if (data == "error") {
+                        alert("error");
+                    }
+                }
+            });
+
+        });
+    });
+    </script>
+</head>
+
+<body style="background-color:coral">
+    <div class="bar bar-header bar-positive" style="margin-bottom:80px;">
+        <a href="index.html" class="button button-clear">Home</a>
+        <h1 class="title">Update List Favorite Song</h1>
+        <a class="button button-clear" href="readjson.html">Read JSON</a>
+    </div>
+    <br/>
+    <br/>
+    <div class="list">
+        <input type="hidden" id="id" value="" />
+        <div class="item">
+            <label>Title of Song</label>
+            <input type="text" id="title" value="" />
+        </div>
+        <div class="item">
+            <label>Singer of Song</label>
+            <input type="text" id="singer" value="" />
+        </div>
+        <div class="item">
+            <label>Country of Song</label>
+            <input type="text" id="country" value="" />
+        </div>
+        <div class="item">
+            <input type="button" id="update" class="btn btn-outline-info button button-block" value="Update" />
+            <input type="button" id="delete" class="button button-block" value="Delete" />
+        </div>
+    </div>
+</body>
+
+</html>
